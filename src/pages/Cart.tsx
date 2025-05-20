@@ -8,9 +8,12 @@ import { useCart } from '@/contexts/CartContext';
 import { Trash2, Plus, Minus } from 'lucide-react';
 import { toast } from '@/components/ui/sonner';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { sendOrderToTelegram } from '@/services/telegramService';
 
 const Cart: React.FC = () => {
   const { cart, removeFromCart, updateQuantity, clearCart, totalPrice } = useCart();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -20,30 +23,59 @@ const Cart: React.FC = () => {
     address: '',
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    // В реальном приложении здесь был бы запрос к API
-    toast.success("Заказ успешно оформлен!");
-    clearCart();
-    setTimeout(() => {
-      navigate('/');
-    }, 2000);
+    try {
+      // Подготавливаем данные для отправки в Telegram
+      const orderData = {
+        items: cart,
+        totalPrice,
+        customer: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address
+        }
+      };
+      
+      // Отправляем данные в Telegram
+      // Для реальной работы необходимо заменить botToken и chatId в telegramService.ts
+      const success = await sendOrderToTelegram(orderData);
+      
+      if (success) {
+        toast.success(t('orderSuccess'));
+        clearCart();
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
+      } else {
+        toast.error("Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте позже.");
+      }
+    } catch (error) {
+      console.error("Error submitting order:", error);
+      toast.error("Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте позже.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (cart.length === 0) {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-3xl font-serif mb-6">Ваша корзина пуста</h1>
-          <p className="text-gray-600 mb-8">Посетите наш каталог, чтобы найти прекрасные ювелирные изделия</p>
+          <h1 className="text-3xl font-serif mb-6">{t('emptyCart')}</h1>
+          <p className="text-gray-600 mb-8">{t('continueShopping')}</p>
           <Button onClick={() => navigate('/catalog')} className="bg-gold hover:bg-gold-dark text-black">
-            Перейти в каталог
+            {t('catalog')}
           </Button>
         </div>
       </Layout>
@@ -53,7 +85,7 @@ const Cart: React.FC = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl md:text-4xl font-serif font-medium mb-8">Корзина</h1>
+        <h1 className="text-3xl md:text-4xl font-serif font-medium mb-8">{t('cart')}</h1>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
@@ -62,10 +94,10 @@ const Cart: React.FC = () => {
               <table className="w-full">
                 <thead className="bg-gray-50 text-gray-700">
                   <tr>
-                    <th className="text-left py-4 px-4 font-medium">Товар</th>
-                    <th className="text-center py-4 px-2 font-medium">Цена</th>
-                    <th className="text-center py-4 px-2 font-medium">Количество</th>
-                    <th className="text-right py-4 px-4 font-medium">Всего</th>
+                    <th className="text-left py-4 px-4 font-medium">{t('cart')}</th>
+                    <th className="text-center py-4 px-2 font-medium">{t('totalPrice')}</th>
+                    <th className="text-center py-4 px-2 font-medium">{t('cart')}</th>
+                    <th className="text-right py-4 px-4 font-medium">{t('totalPrice')}</th>
                     <th className="py-4 px-2 font-medium"></th>
                   </tr>
                 </thead>
@@ -82,6 +114,9 @@ const Cart: React.FC = () => {
                           <div className="ml-4">
                             <h3 className="font-medium">{item.name}</h3>
                             <p className="text-sm text-gray-500">{item.category}</p>
+                            {item.weight && <p className="text-sm text-gray-500">Вес: {item.weight}г</p>}
+                            {item.purity && <p className="text-sm text-gray-500">Проба: {item.purity}</p>}
+                            {item.size && <p className="text-sm text-gray-500">Размер: {item.size}</p>}
                           </div>
                         </div>
                       </td>
@@ -132,14 +167,14 @@ const Cart: React.FC = () => {
                 variant="outline" 
                 onClick={() => navigate('/catalog')}
               >
-                Продолжить покупки
+                {t('continueShopping')}
               </Button>
               <Button 
                 variant="outline" 
                 onClick={clearCart}
                 className="text-red-500 border-red-500 hover:bg-red-50"
               >
-                Очистить корзину
+                {t('clearCart')}
               </Button>
             </div>
           </div>
@@ -147,15 +182,17 @@ const Cart: React.FC = () => {
           {/* Оформление заказа */}
           <div className="lg:col-span-1">
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-xl font-medium mb-4">Детали заказа</h2>
+              <h2 className="text-xl font-medium mb-4">{t('orderDetails')}</h2>
               
               <div className="space-y-2 mb-6">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Товары ({cart.reduce((acc, item) => acc + item.quantity, 0)})</span>
+                  <span className="text-gray-600">
+                    {t('cart')} ({cart.reduce((acc, item) => acc + item.quantity, 0)})
+                  </span>
                   <span>${totalPrice.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between font-medium">
-                  <span>Итого</span>
+                  <span>{t('totalPrice')}</span>
                   <span className="text-lg">${totalPrice.toLocaleString()}</span>
                 </div>
               </div>
@@ -163,7 +200,7 @@ const Cart: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                    Ваше имя *
+                    {t('yourName')} *
                   </label>
                   <Input
                     id="name"
@@ -175,7 +212,7 @@ const Cart: React.FC = () => {
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Email *
+                    {t('email')} *
                   </label>
                   <Input
                     id="email"
@@ -188,7 +225,7 @@ const Cart: React.FC = () => {
                 </div>
                 <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                    Телефон *
+                    {t('phone')} *
                   </label>
                   <Input
                     id="phone"
@@ -201,7 +238,7 @@ const Cart: React.FC = () => {
                 </div>
                 <div>
                   <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                    Адрес доставки *
+                    {t('address')} *
                   </label>
                   <Textarea
                     id="address"
@@ -215,8 +252,9 @@ const Cart: React.FC = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-gold hover:bg-gold-dark text-black mt-4"
+                  disabled={isSubmitting}
                 >
-                  Оформить заказ
+                  {isSubmitting ? "Отправка..." : t('submitOrder')}
                 </Button>
               </form>
             </div>

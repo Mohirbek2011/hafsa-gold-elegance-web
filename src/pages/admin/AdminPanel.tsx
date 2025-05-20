@@ -1,10 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import ProductList from '@/components/admin/ProductList';
 import ProductForm from '@/components/admin/ProductForm';
+import { useProducts, Product } from '@/contexts/ProductContext';
+import { toast } from '@/components/ui/sonner';
 
-// Определяем интерфейс для продукта
+// Определяем интерфейс для продукта в админке
 export interface AdminProduct {
   id: string;
   name: string;
@@ -17,31 +19,74 @@ export interface AdminProduct {
 }
 
 const AdminPanel: React.FC = () => {
-  const [products, setProducts] = useState<AdminProduct[]>([]);
+  const { products: catalogProducts, addProduct, updateProduct, deleteProduct } = useProducts();
+  const [adminProducts, setAdminProducts] = useState<AdminProduct[]>([]);
   const [editingProduct, setEditingProduct] = useState<AdminProduct | null>(null);
+
+  // Синхронизируем админ-продукты с продуктами каталога при первой загрузке
+  useEffect(() => {
+    if (adminProducts.length === 0 && catalogProducts.length > 0) {
+      const mappedProducts: AdminProduct[] = catalogProducts.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        weight: product.weight || 0,
+        category: product.category,
+        purity: product.purity || '',
+        size: product.size || '',
+        imageSrc: product.imageSrc
+      }));
+      setAdminProducts(mappedProducts);
+    }
+  }, [catalogProducts, adminProducts.length]);
 
   // Добавление нового продукта
   const handleAddProduct = (product: Omit<AdminProduct, 'id'>) => {
-    const newProduct = {
+    const newProduct: AdminProduct = {
       ...product,
       id: `product-${Date.now()}`,
     };
-    setProducts([...products, newProduct]);
+    
+    // Добавляем в админ-список
+    setAdminProducts([...adminProducts, newProduct]);
+    
+    // Добавляем в каталог
+    addProduct({
+      ...newProduct,
+      isNew: true // Помечаем как новый товар
+    });
+    
+    toast.success('Товар успешно добавлен в каталог');
   };
 
   // Обновление существующего продукта
   const handleUpdateProduct = (updatedProduct: AdminProduct) => {
-    setProducts(
-      products.map((product) => 
+    // Обновляем в админ-списке
+    setAdminProducts(
+      adminProducts.map((product) => 
         product.id === updatedProduct.id ? updatedProduct : product
       )
     );
+    
+    // Обновляем в каталоге
+    updateProduct({
+      ...updatedProduct,
+      isNew: false // при обновлении товар перестает быть новым
+    });
+    
     setEditingProduct(null);
+    toast.success('Товар успешно обновлен в каталоге');
   };
 
   // Удаление продукта
   const handleDeleteProduct = (id: string) => {
-    setProducts(products.filter((product) => product.id !== id));
+    // Удаляем из админ-списка
+    setAdminProducts(adminProducts.filter((product) => product.id !== id));
+    
+    // Удаляем из каталога
+    deleteProduct(id);
+    
+    toast.success('Товар удален из каталога');
   };
 
   // Начало редактирования продукта
@@ -69,7 +114,7 @@ const AdminPanel: React.FC = () => {
           <div>
             <h2 className="text-xl font-semibold mb-4">Список товаров</h2>
             <ProductList 
-              products={products}
+              products={adminProducts}
               onEdit={handleEditProduct}
               onDelete={handleDeleteProduct}
             />

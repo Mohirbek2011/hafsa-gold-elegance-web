@@ -27,14 +27,16 @@ const productSchema = z.object({
   imageSrc: z.string().url({ message: 'Должен быть действительный URL изображения' }),
 });
 
+type ProductFormData = z.infer<typeof productSchema>;
+
 interface ProductFormProps {
-  onSubmit: (data: Omit<AdminProduct, 'id'> | AdminProduct) => void;
+  onSubmit: (data: AdminProduct) => void;
   initialValues?: AdminProduct;
   onCancel?: () => void;
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, initialValues, onCancel }) => {
-  const form = useForm<z.infer<typeof productSchema>>({
+  const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     defaultValues: initialValues || {
       name: '',
@@ -47,16 +49,19 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, initialValues, onCa
     },
   });
 
-  const handleSubmit = (values: z.infer<typeof productSchema>) => {
+  const handleSubmit = (values: ProductFormData) => {
     if (initialValues) {
-      onSubmit({ ...values, id: initialValues.id });
+      // Обновляем существующий товар
+      onSubmit({ 
+        ...values, 
+        id: initialValues.id 
+      });
       toast.success('Товар обновлен');
     } else {
-      onSubmit(values);
+      // Добавляем новый товар
+      onSubmit(values as AdminProduct);
       toast.success('Товар добавлен');
-    }
-    
-    if (!initialValues) {
+      
       form.reset({
         name: '',
         price: 0,

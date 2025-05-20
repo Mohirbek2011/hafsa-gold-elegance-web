@@ -1,13 +1,18 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Search, ShoppingCart, Menu } from 'lucide-react';
+import { Search, ShoppingCart, Heart, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useCart } from '@/contexts/CartContext';
+import { useFavorites } from '@/contexts/FavoritesContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Header: React.FC = () => {
   const { cart } = useCart();
+  const { favorites } = useFavorites();
+  const { t } = useLanguage();
 
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
   
@@ -25,10 +30,14 @@ const Header: React.FC = () => {
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
               <nav className="flex flex-col gap-6 mt-10">
-                <Link to="/" className="text-lg font-medium hover:text-gold transition-colors">Главная</Link>
-                <Link to="/catalog" className="text-lg font-medium hover:text-gold transition-colors">Каталог</Link>
-                <Link to="/about" className="text-lg font-medium hover:text-gold transition-colors">О нас</Link>
-                <Link to="/contact" className="text-lg font-medium hover:text-gold transition-colors">Контакты</Link>
+                <Link to="/" className="text-lg font-medium hover:text-gold transition-colors">{t('home')}</Link>
+                <Link to="/catalog" className="text-lg font-medium hover:text-gold transition-colors">{t('catalog')}</Link>
+                <Link to="/about" className="text-lg font-medium hover:text-gold transition-colors">{t('about')}</Link>
+                <Link to="/contact" className="text-lg font-medium hover:text-gold transition-colors">{t('contact')}</Link>
+                <Link to="/favorites" className="text-lg font-medium hover:text-gold transition-colors">{t('favorites')}</Link>
+                <div className="mt-4">
+                  <LanguageSwitcher />
+                </div>
               </nav>
             </SheetContent>
           </Sheet>
@@ -44,18 +53,31 @@ const Header: React.FC = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-sm font-medium hover:text-gold transition-colors">Главная</Link>
-            <Link to="/catalog" className="text-sm font-medium hover:text-gold transition-colors">Каталог</Link>
-            <Link to="/about" className="text-sm font-medium hover:text-gold transition-colors">О нас</Link>
-            <Link to="/contact" className="text-sm font-medium hover:text-gold transition-colors">Контакты</Link>
+            <Link to="/" className="text-sm font-medium hover:text-gold transition-colors">{t('home')}</Link>
+            <Link to="/catalog" className="text-sm font-medium hover:text-gold transition-colors">{t('catalog')}</Link>
+            <Link to="/about" className="text-sm font-medium hover:text-gold transition-colors">{t('about')}</Link>
+            <Link to="/contact" className="text-sm font-medium hover:text-gold transition-colors">{t('contact')}</Link>
+            <Link to="/favorites" className="text-sm font-medium hover:text-gold transition-colors">{t('favorites')}</Link>
           </nav>
 
           {/* Right side icons */}
           <div className="flex items-center space-x-2">
+            <LanguageSwitcher />
             <Button variant="ghost" size="icon">
               <Search className="h-5 w-5" />
-              <span className="sr-only">Поиск</span>
+              <span className="sr-only">{t('search')}</span>
             </Button>
+            <Link to="/favorites">
+              <Button variant="ghost" size="icon" className="relative">
+                <Heart className="h-5 w-5" />
+                {favorites.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                    {favorites.length}
+                  </span>
+                )}
+                <span className="sr-only">{t('favorites')}</span>
+              </Button>
+            </Link>
             <Link to="/cart">
               <Button variant="ghost" size="icon" className="relative">
                 <ShoppingCart className="h-5 w-5" />
@@ -64,7 +86,7 @@ const Header: React.FC = () => {
                     {totalItems}
                   </span>
                 )}
-                <span className="sr-only">Корзина</span>
+                <span className="sr-only">{t('cart')}</span>
               </Button>
             </Link>
           </div>
