@@ -24,12 +24,12 @@ const Contact: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would send the data to a server here
+    // В реальном приложении вы бы отправили данные на сервер
     toast({
-      title: "Message Sent",
-      description: "We'll get back to you as soon as possible.",
+      title: "Сообщение отправлено",
+      description: "Мы свяжемся с вами в ближайшее время.",
     });
-    // Reset form
+    // Сброс формы
     setFormData({
       name: '',
       email: '',
@@ -43,20 +43,20 @@ const Contact: React.FC = () => {
     <Layout>
       <div className="bg-gray-100 py-8">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-serif font-medium">Contact Us</h1>
+          <h1 className="text-3xl md:text-4xl font-serif font-medium">Связаться с нами</h1>
           <p className="text-gray-600 mt-2">
-            We'd love to hear from you
+            Мы будем рады услышать вас
           </p>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Contact information */}
+          {/* Контактная информация */}
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-serif mb-6">Get in Touch</h2>
+            <h2 className="text-2xl font-serif mb-6">Свяжитесь с нами</h2>
             <p className="text-gray-600 mb-8">
-              Whether you have a question about our products, services, or anything else, our team is ready to answer all your questions.
+              Если у вас есть вопросы о наших продуктах, услугах или любые другие вопросы, наша команда готова ответить на все ваши вопросы.
             </p>
             
             <div className="space-y-6">
@@ -65,9 +65,8 @@ const Contact: React.FC = () => {
                   <Phone size={18} />
                 </div>
                 <div className="ml-4">
-                  <h3 className="font-medium text-gray-900">Phone</h3>
-                  <p className="text-gray-600 mt-1">+123 456 7890</p>
-                  <p className="text-gray-600">+123 456 7891</p>
+                  <h3 className="font-medium text-gray-900">Телефон</h3>
+                  <p className="text-gray-600 mt-1">+998 97 944 9999</p>
                 </div>
               </div>
               
@@ -87,11 +86,11 @@ const Contact: React.FC = () => {
                   <MapPin size={18} />
                 </div>
                 <div className="ml-4">
-                  <h3 className="font-medium text-gray-900">Location</h3>
+                  <h3 className="font-medium text-gray-900">Адрес</h3>
                   <p className="text-gray-600 mt-1">
-                    123 Gold Avenue<br />
-                    Luxury District, City<br />
-                    Country, 12345
+                    Узбекистан, г. Ташкент<br />
+                    Чорсу Голд дўкони<br />
+                    Ориентир - Тохир Зухра мажмуаси
                   </p>
                 </div>
               </div>
@@ -101,27 +100,27 @@ const Contact: React.FC = () => {
                   <Clock size={18} />
                 </div>
                 <div className="ml-4">
-                  <h3 className="font-medium text-gray-900">Business Hours</h3>
+                  <h3 className="font-medium text-gray-900">Часы работы</h3>
                   <p className="text-gray-600 mt-1">
-                    Monday - Friday: 9:00 AM - 8:00 PM<br />
-                    Saturday: 10:00 AM - 6:00 PM<br />
-                    Sunday: Closed
+                    Понедельник - Пятница: 9:00 - 20:00<br />
+                    Суббота: 10:00 - 18:00<br />
+                    Воскресенье: Выходной
                   </p>
                 </div>
               </div>
             </div>
           </div>
           
-          {/* Contact form */}
+          {/* Форма связи */}
           <div className="lg:col-span-3">
             <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-serif mb-6">Send a Message</h2>
+              <h2 className="text-2xl font-serif mb-6">Отправить сообщение</h2>
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                      Your Name *
+                      Ваше имя *
                     </label>
                     <Input
                       id="name"
@@ -134,7 +133,7 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      Email Address *
+                      Email адрес *
                     </label>
                     <Input
                       id="email"
@@ -151,7 +150,7 @@ const Contact: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone Number
+                      Номер телефона
                     </label>
                     <Input
                       id="phone"
@@ -163,7 +162,7 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
-                      Subject *
+                      Тема *
                     </label>
                     <Input
                       id="subject"
@@ -178,7 +177,7 @@ const Contact: React.FC = () => {
                 
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                    Your Message *
+                    Ваше сообщение *
                   </label>
                   <Textarea
                     id="message"
@@ -191,7 +190,7 @@ const Contact: React.FC = () => {
                 </div>
                 
                 <Button type="submit" className="bg-gold hover:bg-gold-dark text-black w-full sm:w-auto">
-                  Send Message
+                  Отправить сообщение
                 </Button>
               </form>
             </div>
@@ -199,11 +198,10 @@ const Contact: React.FC = () => {
         </div>
         
         <div className="mt-12">
-          <h2 className="text-2xl font-serif mb-6">Find Us</h2>
+          <h2 className="text-2xl font-serif mb-6">Где нас найти</h2>
           <div className="aspect-[16/9] w-full rounded-lg overflow-hidden border border-gray-200">
-            {/* Replace with an actual map component in a production app */}
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14008.115265342486!2d77.20688171984224!3d28.613172591556485!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce2b9575f4eb7%3A0x7f6ae208975b0c1!2sConnaught%20Place%2C%20New%20Delhi%2C%20Delhi%2C%20India!5e0!3m2!1sen!2sus!4v1673642124973!5m2!1sen!2sus" 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2996.5124909954396!2d69.23610531642426!3d41.31399540923998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38ae8a4a6c5dde17%3A0x9de355f970836ae6!2z0JHQsNC30LDRgCDQp9C-0YDRgdGDLCBUYXNoa2VudCwgVXpiZWtpc3Rhbg!5e0!3m2!1sru!2s!4v1715446051570!5m2!1sru!2s"
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 
