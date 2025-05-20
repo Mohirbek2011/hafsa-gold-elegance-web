@@ -9,6 +9,9 @@ export interface CartItem {
   imageSrc: string;
   category: string;
   quantity: number;
+  weight?: number; // вес в граммах
+  purity?: string; // проба
+  size?: string; // размер
 }
 
 interface CartContextType {
