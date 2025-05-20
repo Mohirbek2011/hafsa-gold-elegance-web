@@ -53,13 +53,28 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, initialValues, onCa
     if (initialValues) {
       // Обновляем существующий товар
       onSubmit({ 
-        ...values, 
-        id: initialValues.id 
+        id: initialValues.id,
+        name: values.name,
+        price: values.price,
+        weight: values.weight,
+        category: values.category,
+        purity: values.purity,
+        size: values.size,
+        imageSrc: values.imageSrc
       });
       toast.success('Товар обновлен');
     } else {
       // Добавляем новый товар
-      onSubmit(values as AdminProduct);
+      onSubmit({
+        id: `temp-${Date.now()}`, // Временный ID, который будет перезаписан в AdminPanel
+        name: values.name,
+        price: values.price,
+        weight: values.weight,
+        category: values.category,
+        purity: values.purity,
+        size: values.size,
+        imageSrc: values.imageSrc
+      });
       toast.success('Товар добавлен');
       
       form.reset({

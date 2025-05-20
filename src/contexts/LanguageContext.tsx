@@ -5,133 +5,157 @@ export type Language = 'ru' | 'uz' | 'en';
 
 interface LanguageContextType {
   language: Language;
-  setLanguage: (language: Language) => void;
+  setLanguage: (lang: Language) => void;
   t: (key: string) => string;
 }
 
-const translations = {
-  'ru': {
-    'home': 'Главная',
-    'catalog': 'Каталог',
-    'about': 'О нас',
-    'contact': 'Контакты',
-    'cart': 'Корзина',
-    'favorites': 'Избранное',
-    'search': 'Поиск',
-    'addToCart': 'В корзину',
-    'removeFromCart': 'Удалить',
-    'checkout': 'Оформить заказ',
-    'totalPrice': 'Итого',
-    'emptyCart': 'Ваша корзина пуста',
-    'continueShopping': 'Продолжить покупки',
-    'clearCart': 'Очистить корзину',
-    'orderDetails': 'Детали заказа',
-    'yourName': 'Ваше имя',
-    'email': 'Email',
-    'phone': 'Телефон',
-    'address': 'Адрес доставки',
-    'submitOrder': 'Оформить заказ',
-    'orderSuccess': 'Заказ успешно оформлен!',
-    'featured': 'Рекомендуемые товары',
-    'viewAll': 'Смотреть все',
+const translations: Record<Language, Record<string, string>> = {
+  ru: {
+    // Общие
+    'featured': 'Избранные товары',
     'new': 'Новинка',
+    'viewAll': 'Посмотреть все товары',
+    'noProductsYet': 'На данный момент товары не загружены. Администратор скоро добавит новые товары.',
+    'addToCart': 'Добавить в корзину',
+    'addToFav': 'Добавить в избранное',
+    'removeFromFav': 'Удалить из избранного',
+    'clearCart': 'Очистить корзину',
+    'continueShopping': 'Продолжить покупки',
+    'submitOrder': 'Оформить заказ',
+    'orderSuccess': 'Ваш заказ успешно отправлен! Мы свяжемся с вами в ближайшее время.',
+    'orderDetails': 'Детали заказа',
+
+    // Категории
+    'catalog': 'Каталог',
     'categories': 'Категории',
-    'priceRange': 'Диапазон цен',
-    'sortBy': 'Сортировать по',
-    'featured_sort': 'Рекомендуемые',
-    'price_asc': 'Цена: по возрастанию',
-    'price_desc': 'Цена: по убыванию',
     'all': 'Все',
     'rings': 'Кольца',
     'necklaces': 'Ожерелья',
     'earrings': 'Серьги',
     'bracelets': 'Браслеты',
-    'addToFav': 'Добавить в избранное',
-    'removeFromFav': 'Удалить из избранного',
-    'emptyFav': 'Ваш список избранного пуст',
+
+    // Корзина и товары
+    'cart': 'Корзина',
+    'emptyCart': 'Ваша корзина пуста',
+    'totalPrice': 'Итоговая сумма',
+    'quantity': 'Количество',
+
+    // Избранное
     'favItems': 'Избранные товары',
-  },
-  'uz': {
-    'home': 'Асосий',
-    'catalog': 'Каталог',
-    'about': 'Биз ҳақимизда',
-    'contact': 'Алоқа',
-    'cart': 'Сават',
-    'favorites': 'Севимли',
-    'search': 'Қидирув',
-    'addToCart': 'Саватга',
-    'removeFromCart': 'Ўчириш',
-    'checkout': 'Буюртма бериш',
-    'totalPrice': 'Жами',
-    'emptyCart': 'Сизнинг саватингиз бўш',
-    'continueShopping': 'Харидни давом эттириш',
-    'clearCart': 'Саватни тозалаш',
-    'orderDetails': 'Буюртма тафсилотлари',
-    'yourName': 'Исмингиз',
+    'emptyFav': 'У вас нет избранных товаров',
+
+    // Фильтры
+    'priceRange': 'Диапазон цен',
+    'sortBy': 'Сортировать по',
+    'featured_sort': 'Популярные',
+    'price_asc': 'Цена (по возрастанию)',
+    'price_desc': 'Цена (по убыванию)',
+
+    // Контактная информация
+    'yourName': 'Ваше имя',
     'email': 'Email',
-    'phone': 'Телефон',
-    'address': 'Етказиб бериш манзили',
-    'submitOrder': 'Буюртма бериш',
-    'orderSuccess': 'Буюртма муваффақиятли расмийлаштирилди!',
-    'featured': 'Тавсия этилган маҳсулотлар',
-    'viewAll': 'Ҳаммасини кўриш',
-    'new': 'Янги',
-    'categories': 'Категориялар',
-    'priceRange': 'Нарх диапазони',
-    'sortBy': 'Сортировка',
-    'featured_sort': 'Тавсия этилган',
-    'price_asc': 'Нарх: ўсиш бўйича',
-    'price_desc': 'Нарх: камайиш бўйича',
-    'all': 'Барча',
-    'rings': 'Узуклар',
-    'necklaces': 'Марваридлар',
-    'earrings': 'Сирғалар',
-    'bracelets': 'Билагузуклар',
-    'addToFav': 'Севимлиларга қўшиш',
-    'removeFromFav': 'Севимлилардан ўчириш',
-    'emptyFav': 'Сизнинг севимли рўйхатингиз бўш',
-    'favItems': 'Севимли маҳсулотлар',
+    'phone': 'Номер телефона',
+    'address': 'Адрес доставки',
+    'message': 'Сообщение',
+    'sendMessage': 'Отправить сообщение'
   },
-  'en': {
-    'home': 'Home',
-    'catalog': 'Catalog',
-    'about': 'About Us',
-    'contact': 'Contact',
-    'cart': 'Cart',
-    'favorites': 'Favorites',
-    'search': 'Search',
-    'addToCart': 'Add to Cart',
-    'removeFromCart': 'Remove',
-    'checkout': 'Checkout',
-    'totalPrice': 'Total',
-    'emptyCart': 'Your cart is empty',
-    'continueShopping': 'Continue Shopping',
-    'clearCart': 'Clear Cart',
-    'orderDetails': 'Order Details',
-    'yourName': 'Your Name',
+  uz: {
+    // Общие
+    'featured': 'Tanlangan mahsulotlar',
+    'new': 'Yangi',
+    'viewAll': 'Barcha mahsulotlarni ko\'rish',
+    'noProductsYet': 'Hozircha mahsulotlar yuklanmagan. Administrator tez orada yangi mahsulotlar qo\'shadi.',
+    'addToCart': 'Savatga qo\'shish',
+    'addToFav': 'Sevimlilar qo\'shish',
+    'removeFromFav': 'Sevimlilardan olib tashlash',
+    'clearCart': 'Savatni tozalash',
+    'continueShopping': 'Xaridni davom ettirish',
+    'submitOrder': 'Buyurtma berish',
+    'orderSuccess': 'Buyurtmangiz muvaffaqiyatli yuborildi! Tez orada siz bilan bog\'lanamiz.',
+    'orderDetails': 'Buyurtma tafsilotlari',
+
+    // Категории
+    'catalog': 'Katalog',
+    'categories': 'Kategoriyalar',
+    'all': 'Barchasi',
+    'rings': 'Uzuklar',
+    'necklaces': 'Marjonlar',
+    'earrings': 'Sirg\'alar',
+    'bracelets': 'Bilaguzuklar',
+
+    // Корзина и товары
+    'cart': 'Savat',
+    'emptyCart': 'Savatingiz bo\'sh',
+    'totalPrice': 'Jami summa',
+    'quantity': 'Miqdori',
+
+    // Избранное
+    'favItems': 'Sevimli mahsulotlar',
+    'emptyFav': 'Sevimli mahsulotlaringiz yo\'q',
+
+    // Фильтры
+    'priceRange': 'Narx oralig\'i',
+    'sortBy': 'Saralash turi',
+    'featured_sort': 'Mashhur',
+    'price_asc': 'Narx (o\'sish bo\'yicha)',
+    'price_desc': 'Narx (kamayish bo\'yicha)',
+
+    // Контактная информация
+    'yourName': 'Ismingiz',
     'email': 'Email',
-    'phone': 'Phone',
-    'address': 'Delivery Address',
-    'submitOrder': 'Place Order',
-    'orderSuccess': 'Order successfully placed!',
+    'phone': 'Telefon raqami',
+    'address': 'Yetkazib berish manzili',
+    'message': 'Xabar',
+    'sendMessage': 'Xabar yuborish'
+  },
+  en: {
+    // Общие
     'featured': 'Featured Products',
-    'viewAll': 'View All',
     'new': 'New',
+    'viewAll': 'View All Products',
+    'noProductsYet': 'No products are uploaded yet. The administrator will add new products soon.',
+    'addToCart': 'Add to Cart',
+    'addToFav': 'Add to Favorites',
+    'removeFromFav': 'Remove from Favorites',
+    'clearCart': 'Clear Cart',
+    'continueShopping': 'Continue Shopping',
+    'submitOrder': 'Submit Order',
+    'orderSuccess': 'Your order has been successfully sent! We will contact you shortly.',
+    'orderDetails': 'Order Details',
+
+    // Категории
+    'catalog': 'Catalog',
     'categories': 'Categories',
-    'priceRange': 'Price Range',
-    'sortBy': 'Sort By',
-    'featured_sort': 'Featured',
-    'price_asc': 'Price: Low to High',
-    'price_desc': 'Price: High to Low',
     'all': 'All',
     'rings': 'Rings',
     'necklaces': 'Necklaces',
     'earrings': 'Earrings',
     'bracelets': 'Bracelets',
-    'addToFav': 'Add to Favorites',
-    'removeFromFav': 'Remove from Favorites',
-    'emptyFav': 'Your favorites list is empty',
+
+    // Корзина и товары
+    'cart': 'Cart',
+    'emptyCart': 'Your cart is empty',
+    'totalPrice': 'Total Price',
+    'quantity': 'Quantity',
+
+    // Избранное
     'favItems': 'Favorite Items',
+    'emptyFav': 'You have no favorite items',
+
+    // Фильтры
+    'priceRange': 'Price Range',
+    'sortBy': 'Sort By',
+    'featured_sort': 'Featured',
+    'price_asc': 'Price (Low to High)',
+    'price_desc': 'Price (High to Low)',
+
+    // Контактная информация
+    'yourName': 'Your Name',
+    'email': 'Email',
+    'phone': 'Phone Number',
+    'address': 'Delivery Address',
+    'message': 'Message',
+    'sendMessage': 'Send Message'
   }
 };
 
@@ -141,7 +165,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [language, setLanguage] = useState<Language>('ru');
 
   const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations[typeof language]] || key;
+    return translations[language][key] || key;
   };
 
   return (

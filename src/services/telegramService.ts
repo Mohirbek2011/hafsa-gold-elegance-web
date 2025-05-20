@@ -18,15 +18,14 @@ interface TelegramConfig {
   chatId: string;
 }
 
-// В реальном приложении эти данные должны храниться на сервере
+// Настроенные данные для Telegram бота
 const defaultConfig: TelegramConfig = {
-  botToken: 'YOUR_TELEGRAM_BOT_TOKEN',
-  chatId: 'YOUR_TELEGRAM_CHAT_ID'
+  botToken: '7327589640:AAEC3lMuU5WjalPIEqoP0Uqay3ZZPcFbVAQ',
+  chatId: '-4608170349'
 };
 
 /**
  * Отправка заказа в Telegram
- * Для работы нужно заменить botToken и chatId в коде или передать их при вызове
  */
 export const sendOrderToTelegram = async (
   orderData: OrderData,

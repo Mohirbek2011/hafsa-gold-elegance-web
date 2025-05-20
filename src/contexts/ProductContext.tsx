@@ -15,51 +15,8 @@ interface ProductContextType {
   deleteProduct: (id: string) => void;
 }
 
-// Начальные товары для каталога
-const initialProducts: Product[] = [
-  {
-    id: 'elegant-gold-ring-1',
-    name: 'Элегантное золотое кольцо',
-    price: 1200,
-    imageSrc: 'https://images.unsplash.com/photo-1603561596112-0a132b757442?q=80&w=1480&auto=format&fit=crop',
-    category: 'Кольца',
-    weight: 5.2,
-    purity: '585',
-    size: '16.5',
-    isNew: true,
-  },
-  {
-    id: 'diamond-gold-necklace-1',
-    name: 'Золотое ожерелье с бриллиантами',
-    price: 2400,
-    imageSrc: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=1470&auto=format&fit=crop',
-    category: 'Ожерелья',
-    weight: 12.5,
-    purity: '750',
-    size: '',
-  },
-  {
-    id: 'pearl-drop-earrings-1',
-    name: 'Жемчужные серьги',
-    price: 950,
-    imageSrc: 'https://images.unsplash.com/photo-1615655114865-4cc1bda5901e?q=80&w=1470&auto=format&fit=crop',
-    category: 'Серьги',
-    weight: 3.8,
-    purity: '585',
-    size: '',
-    isNew: true,
-  },
-  {
-    id: 'twisted-gold-bracelet-1',
-    name: 'Плетеный золотой браслет',
-    price: 1850,
-    imageSrc: 'https://images.unsplash.com/photo-1601121141223-1758eac6b53b?q=80&w=1470&auto=format&fit=crop',
-    category: 'Браслеты',
-    weight: 8.9,
-    purity: '750',
-    size: '19',
-  }
-];
+// Пустой массив товаров для начала
+const initialProducts: Product[] = [];
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
